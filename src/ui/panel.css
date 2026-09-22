@@ -1,0 +1,101 @@
+:root {
+  color-scheme: dark;
+  --bg: #111318;
+  --panel: #171a21;
+  --card: #1e222b;
+  --card-2: #12151b;
+  --border: #2b3140;
+  --text: #e8eaf0;
+  --muted: #98a2b3;
+  --accent: #4f8cff;
+  --accent-2: #3a6fd8;
+  --success: #3ddc97;
+  --error: #ff6b6b;
+  --radius: 10px;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 14px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); }
+#app { display: grid; grid-template-columns: 1fr 380px; height: 100vh; }
+#scene { position: relative; min-width: 0; touch-action: none; }
+#scene canvas { display: block; width: 100%; height: 100%; }
+#panel {
+  overflow: auto;
+  padding: 16px; display: flex; flex-direction: column; gap: 14px;
+}
+
+/* Cards */
+.section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 14px 16px; }
+.section h2 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 12px; }
+.section-body { display: flex; flex-direction: column; gap: 10px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+.muted { color: var(--muted); }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+
+/* Buttons */
+button {
+  background: #2a3040; color: var(--text); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 14px; font: inherit; font-weight: 500; cursor: pointer; min-width: 44px; line-height: 1.2;
+  transition: background 120ms ease, border-color 120ms ease, transform 80ms ease;
+}
+button:hover { border-color: var(--accent); background: #313849; }
+button:active { transform: translateY(1px); }
+button:disabled { opacity: 0.4; cursor: default; transform: none; }
+button:disabled:hover { border-color: var(--border); background: #2a3040; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
+
+/* Solve */
+.step-info { font-size: 13px; line-height: 1.45; padding: 10px 12px; background: var(--card-2); border: 1px solid var(--border); border-radius: 8px; }
+
+/* Label — value rows */
+.kv-list { display: flex; flex-direction: column; gap: 6px; }
+.kv { display: grid; grid-template-columns: 110px 1fr; gap: 10px; align-items: baseline; font-size: 13px; line-height: 1.4; }
+.kv-label { color: var(--muted); }
+.kv-value { color: var(--text); word-break: break-word; }
+
+/* Coach */
+.coach-log { display: flex; flex-direction: column; gap: 8px; min-height: 64px; padding: 12px; background: var(--card-2); border: 1px solid var(--border); border-radius: 8px; }
+.coach-log:empty::before { content: 'The coach is quiet.'; color: var(--muted); }
+.coach-message { padding: 10px 12px; background: rgba(79, 140, 255, 0.12); border-left: 3px solid var(--accent); border-radius: 6px; line-height: 1.45; }
+
+/* Status */
+details.debug summary { cursor: pointer; color: var(--muted); font-size: 12px; user-select: none; }
+details.debug summary:hover { color: var(--text); }
+.facelets { display: block; margin-top: 8px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; word-break: break-all; color: var(--muted); line-height: 1.5; }
+
+/* Log */
+.log {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; line-height: 1.5; white-space: pre-wrap;
+  max-height: 180px; min-height: 48px; overflow: auto; background: var(--card-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+}
+.log:empty::before { content: 'Nothing yet.'; color: var(--muted); }
+.log .error { color: var(--error); }
+
+@media (max-width: 800px) {
+  #app { grid-template-columns: 1fr; grid-template-rows: 58vh 1fr; }
+}
+
+/* Whole-cube rotate buttons over the 3D view; shown on hover (always on touch devices). */
+.rotate-overlay { position: absolute; inset: 0; pointer-events: none; }
+.rotate-overlay .rotate {
+  position: absolute; pointer-events: auto; width: 44px; height: 44px; min-width: 0; padding: 0;
+  display: grid; place-items: center; border-radius: 50%;
+  background: rgba(38, 43, 54, 0.85); border: 1px solid var(--border); color: var(--text);
+  opacity: 0; transition: opacity 160ms ease, border-color 120ms ease;
+}
+#scene:hover .rotate-overlay .rotate, .rotate-overlay .rotate:focus-visible { opacity: 1; }
+@media (hover: none) { .rotate-overlay .rotate { opacity: 1; } }
+.rotate-overlay .rotate:hover { border-color: var(--accent); }
+.rotate-overlay .top { top: 14px; left: 50%; transform: translateX(-50%); }
+.rotate-overlay .bottom { bottom: 14px; left: 50%; transform: translateX(-50%); }
+.rotate-overlay .left { left: 14px; top: 50%; transform: translateY(-50%); }
+.rotate-overlay .right { right: 14px; top: 50%; transform: translateY(-50%); }
+.rotate-overlay .top-left { top: 14px; left: 14px; }
+.rotate-overlay .top-right { top: 14px; right: 14px; }
+
+/* Drag hint: two arrows over the hovered sticker, aligned with the layers a drag would turn. */
+.drag-hint { position: absolute; pointer-events: none; color: rgba(255, 255, 255, 0.92); filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.9)); }
+.drag-hint svg { position: absolute; left: 0; top: 0; transform-origin: center; }
+#scene canvas { cursor: grab; }
