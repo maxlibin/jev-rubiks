@@ -61,10 +61,6 @@ npm run dev                 # http://localhost:5173
 The browser never talks to `api.typesafe.ai` directly — its CORS policy rejects browser origins, and
 the key must not ship to the page. The Vite dev server proxies `/api/typesafe` and injects the key.
 
-If the dev server logs `getaddrinfo ENOTFOUND api.typesafe.ai` while your browser resolves it fine
-(some sandboxed shells get no DNS configuration from macOS), add `TYPESAFE_DNS_SERVERS=1.1.1.1,8.8.8.8`
-to `.env`; the proxy then resolves through those servers itself.
-
 ## Verify it
 
 ```bash
